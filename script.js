@@ -1,5 +1,6 @@
 let btns = document.querySelectorAll('button');
 let count = 0;
+let showWinner = false;
 let xMoves = [], oMoves = [];
 let winMoves = [
   [0, 1, 2],
@@ -15,6 +16,7 @@ let winMoves = [
 for (const btn of btns) {
   btn.addEventListener('click', function() {
     console.log(this.value);
+    this.disabled = true;
     if (count%2 == 0) {
       this.innerHTML = 'X';
       xMoves.push(this.value);
@@ -27,18 +29,35 @@ for (const btn of btns) {
     
     if (count >= 5) {
       for (const move of winMoves) {
+      let xCount = 0, oCount = 0;
         for (const num of move) {
           for (const i of xMoves) {
-            if (i == num)
-            count = 9;
+            if (i == num) {
+              if (count%2 == 0) { // x player
+                xCount++;
+              }
+              else { // o player
+                oCount++;
+              }
+              count++;
+            }
+            if (xCount == 3 || oCount == 3) {
+              showWinner = true;
+            }
           }
         }
       }
     }
     
-    if (count == 9) {
-      console.log('sssssss');
+    if (showWinner) {
+      if (count%2 == 0) { // x player
+        console.log('X player won');
+      }
+      else { // o player
+        console.log('O player won');
+      }
       count = 0;
+      showWinner = false;
       for (const btn of btns) {
         btn.innerHTML = '';
       }
